@@ -4,7 +4,7 @@
 
 It's also a complete DevOps capstone: the same app travels from a laptop through CI, security scanning and a container registry to an autoscaled, monitored Kubernetes cluster on AWS, provisioned with Terraform.
 
-![StockPilot dashboard](docs/screenshots/dashboard.png)
+![StockPilot dashboard](docs/screenshots/m1-app-browser.png)
 
 ```text
 Developer ─► GitHub ─► GitHub Actions ─────────────────────────────► AWS (Terraform)
