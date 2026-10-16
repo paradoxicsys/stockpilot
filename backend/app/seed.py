@@ -2,10 +2,12 @@
 
 from decimal import Decimal
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 
 from app.database import SessionLocal
 from app.models import Product, StockMovement
+
+SEED_LOCK_ID = 7_301_2025
 
 DEMO_PRODUCTS = [
     ("KB-1042", "Mechanical keyboard", "Peripherals", 48, 15, "79.00", "KeyWorks Ltd"),
@@ -23,6 +25,10 @@ DEMO_PRODUCTS = [
 
 def seed() -> int:
     with SessionLocal() as db:
+        if db.get_bind().dialect.name == "postgresql":
+            # Replicas start together; the lock (released on commit) makes only
+            # the first one seed and the rest see a non-empty table.
+            db.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": SEED_LOCK_ID})
         if db.scalar(select(func.count(Product.id))):
             return 0
         for sku, name, category, qty, reorder, price, supplier in DEMO_PRODUCTS:
