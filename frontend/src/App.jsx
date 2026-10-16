@@ -87,7 +87,7 @@ export default function App() {
           </button>
           <div className="title">
             <h1>Inventory overview</h1>
-            <p className="muted">Live stock levels, reorder alerts and movements</p>
+            <p className="muted">Live stock levels, reorder alerts and a full movement audit trail</p>
           </div>
           <div className="topbar-actions">
             <label className="search">
