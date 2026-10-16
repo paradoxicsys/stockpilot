@@ -39,9 +39,15 @@ resource "aws_iam_role" "github_deploy" {
         StringEquals = {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
         }
-        # Only workflows on the main branch of this repository may deploy
+        # Only workflows on the main branch of this repository may deploy.
+        # Accepts GitHub's immutable subject (pinned to owner/repo IDs, so a
+        # re-created account or repo with the same name can't match) and the
+        # classic name-based subject.
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:${var.github_repository}:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub" = compact([
+            var.github_oidc_sub_prefix == "" ? "" : "${var.github_oidc_sub_prefix}:ref:refs/heads/main",
+            "repo:${var.github_repository}:ref:refs/heads/main",
+          ])
         }
       }
     }]

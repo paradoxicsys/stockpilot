@@ -49,6 +49,17 @@ variable "github_repository" {
   default     = ""
 }
 
+variable "github_oidc_sub_prefix" {
+  description = <<-EOT
+    The repo's OIDC subject prefix when GitHub uses immutable subjects, e.g.
+    "repo:owner@1234/repo@5678". Find it with:
+      gh api repos/<owner>/<repo>/actions/oidc/customization/sub --jq .sub_claim_prefix
+    Leave empty if your tokens use the classic "repo:owner/repo" format.
+  EOT
+  type        = string
+  default     = ""
+}
+
 variable "create_github_oidc_provider" {
   description = "Create the GitHub Actions OIDC provider. Set false if your AWS account already has one."
   type        = bool

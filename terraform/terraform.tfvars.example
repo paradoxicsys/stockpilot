@@ -13,3 +13,7 @@ node_max_size       = 4
 # "your-github-user/stockpilot" enables keyless deploys from GitHub Actions
 github_repository           = ""
 create_github_oidc_provider = true
+
+# If GitHub issues immutable OIDC subjects for your repo, set the prefix from:
+#   gh api repos/<owner>/<repo>/actions/oidc/customization/sub --jq .sub_claim_prefix
+github_oidc_sub_prefix = ""
