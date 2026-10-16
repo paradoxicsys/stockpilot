@@ -1,0 +1,15 @@
+# Copy to terraform.tfvars and adjust. terraform.tfvars is git-ignored.
+# AWS credentials are NOT set here: use `aws configure` / AWS SSO / env vars.
+
+region             = "ap-south-1"
+project            = "stockpilot"
+kubernetes_version = "1.36"
+
+node_instance_types = ["t3.medium"]
+node_desired_size   = 3
+node_min_size       = 2
+node_max_size       = 4
+
+# "your-github-user/stockpilot" enables keyless deploys from GitHub Actions
+github_repository           = ""
+create_github_oidc_provider = true
