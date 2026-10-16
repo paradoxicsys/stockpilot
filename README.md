@@ -6,6 +6,15 @@ It's also a complete DevOps capstone: the same app travels from a laptop through
 
 ![StockPilot dashboard](docs/screenshots/m1-app-browser.png)
 
+## Final deliverables
+
+| | |
+|---|---|
+| 📄 [Project report (PDF, 9 pages)](Final%20Deliverables/StockPilot-Project-Report.pdf) | Architecture, every DevOps stage, evidence and rubric coverage |
+| 🎬 [Demo video (3:21)](Final%20Deliverables/StockPilot-Demo-Video.mp4) | Narrated walkthrough, including a live commit-to-production deploy |
+| 🖼️ [Screenshots](docs/screenshots) | Evidence for each rubric module |
+| 🔒 [Trivy findings](docs/SECURITY-SCAN.md) | What the security scan found and how it was fixed |
+
 ```text
 Developer ─► GitHub ─► GitHub Actions ─────────────────────────────► AWS (Terraform)
                         ├─ pytest (21 tests)                          VPC: 2 public + 2 private subnets
@@ -61,6 +70,7 @@ troubleshooting/    Deliberately broken manifests for debugging practice
 scripts/            Cluster bootstrap, local kind cluster, load test
 .github/workflows/  CI/CD pipeline
 docs/               Trivy findings write-up and submission screenshots
+Final Deliverables/ Project report (PDF) and demo video
 ```
 
 ## API
