@@ -1,0 +1,25 @@
+# AWS EKS. CI passes the image tag (commit SHA) and the GHCR owner:
+#   --set backend.image.repository=ghcr.io/<owner>/stockpilot-backend
+#   --set backend.image.tag=<sha> (same for frontend)
+backend:
+  image:
+    repository: ghcr.io/CHANGE-ME/stockpilot-backend
+    pullPolicy: IfNotPresent
+frontend:
+  image:
+    repository: ghcr.io/CHANGE-ME/stockpilot-frontend
+    pullPolicy: IfNotPresent
+
+postgres:
+  storage:
+    storageClassName: gp3   # from k8s/storageclass-gp3.yaml (EBS CSI driver)
+
+ingress:
+  enabled: true
+  host: ""   # serve on the ingress-nginx load balancer hostname
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true

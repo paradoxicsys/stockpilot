@@ -1,0 +1,19 @@
+StockPilot {{ .Values.backend.image.tag }} deployed to namespace {{ .Release.Namespace }}.
+
+  kubectl get pods,svc,hpa{{ if .Values.ingress.enabled }},ingress{{ end }} -n {{ .Release.Namespace }}
+  helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.host }}
+
+Open: http://{{ .Values.ingress.host }}/   (API docs: http://{{ .Values.ingress.host }}/docs)
+{{- else }}
+
+Get the load balancer address:
+  kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+{{- end }}
+{{- else }}
+
+Port-forward the frontend:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "stockpilot.fullname" . }}-frontend 3000:80
+{{- end }}

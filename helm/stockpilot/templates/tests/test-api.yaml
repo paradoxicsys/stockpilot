@@ -1,0 +1,29 @@
+# Run with: helm test <release> -n <namespace>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "stockpilot.fullname" . }}-test-api
+  labels:
+    {{- include "stockpilot.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: curl
+      image: curlimages/curl:8.11.1
+      securityContext:
+        {{- include "stockpilot.podSecurity" . | nindent 8 }}
+      command: ["sh", "-c"]
+      args:
+        - |
+          set -e
+          curl -fsS http://{{ include "stockpilot.backendHost" . }}:8000/ready
+          curl -fsS http://{{ include "stockpilot.backendHost" . }}:8000/api/products/stats
+          curl -fsS http://{{ include "stockpilot.fullname" . }}-frontend/api/products/stats

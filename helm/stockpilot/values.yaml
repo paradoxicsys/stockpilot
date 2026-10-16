@@ -1,0 +1,79 @@
+# Defaults target a local cluster (Docker Desktop / kind / minikube) using
+# images built with `docker compose build`. See values-dev.yaml and
+# values-eks.yaml for environment overrides.
+
+nameOverride: ""
+fullnameOverride: ""
+
+# e.g. [{name: ghcr-pull}] if your GHCR packages are private
+imagePullSecrets: []
+
+backend:
+  image:
+    repository: stockpilot-backend
+    tag: local            # CI sets this to the Git commit SHA
+    pullPolicy: IfNotPresent
+  replicaCount: 2         # ignored when autoscaling.enabled (HPA owns replicas)
+  seedData: true          # insert demo products into an empty database
+  resources:
+    requests:
+      cpu: 100m           # HPA percentages are relative to this request
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 60
+
+frontend:
+  image:
+    repository: stockpilot-frontend
+    tag: local
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+postgres:
+  image: postgres:16-alpine
+  auth:
+    database: stockpilot
+    username: stockpilot
+    # Leave empty to generate a random password on first install
+    # (kept across upgrades). Never commit a real password here.
+    password: ""
+  storage:
+    size: 2Gi
+    storageClassName: ""  # "" = cluster default StorageClass
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: false
+  className: nginx
+  host: stockpilot.local  # "" = match any host (e.g. the raw load balancer DNS name)
+  annotations: {}
+
+monitoring:
+  # Requires the Prometheus Operator CRDs (kube-prometheus-stack)
+  serviceMonitor:
+    enabled: false
+    interval: 15s
+    labels:
+      release: kube-prometheus-stack
+  # ConfigMap picked up by the Grafana dashboard sidecar
+  grafanaDashboard:
+    enabled: false

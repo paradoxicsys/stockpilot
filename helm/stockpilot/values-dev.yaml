@@ -1,0 +1,11 @@
+# Local/classroom cluster with ingress-nginx and kube-prometheus-stack installed.
+# Add "127.0.0.1 stockpilot.local" to /etc/hosts, then open http://stockpilot.local
+ingress:
+  enabled: true
+  host: stockpilot.local
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true
