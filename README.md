@@ -60,7 +60,7 @@ monitoring/         kube-prometheus-stack values
 troubleshooting/    Deliberately broken manifests for debugging practice
 scripts/            Cluster bootstrap, local kind cluster, load test
 .github/workflows/  CI/CD pipeline
-docs/               Submission checklist, demo script, security-scan notes
+docs/               Trivy findings write-up and submission screenshots
 ```
 
 ## API
