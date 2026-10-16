@@ -25,3 +25,7 @@ USER 101
 
 ENV BACKEND_URL=http://backend:8000
 EXPOSE 8080
+
+# Shown as the package description on GitHub Container Registry
+LABEL org.opencontainers.image.title="stockpilot-frontend" \
+      org.opencontainers.image.description="StockPilot frontend: React inventory dashboard served by unprivileged Nginx"

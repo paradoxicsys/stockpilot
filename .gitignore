@@ -33,3 +33,7 @@ helm/**/charts/*.tgz
 .DS_Store
 .idea/
 .vscode/
+
+# Saved Terraform plans
+tfplan
+*.tfplan
