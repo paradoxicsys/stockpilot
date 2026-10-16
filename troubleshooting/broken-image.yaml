@@ -1,0 +1,31 @@
+# LAB 1: a Deployment whose image tag does not exist.
+#   kubectl apply -f troubleshooting/broken-image.yaml
+#   kubectl get pods -n stockpilot-lab                      -> ErrImagePull / ImagePullBackOff
+#   kubectl describe pod -n stockpilot-lab -l app=inventory-worker
+#   kubectl get events -n stockpilot-lab --sort-by=.lastTimestamp
+# Find the bad tag in the Events section, fix it, re-apply.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stockpilot-lab
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-worker
+  namespace: stockpilot-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-worker
+  template:
+    metadata:
+      labels:
+        app: inventory-worker
+    spec:
+      containers:
+        - name: worker
+          image: nginxinc/nginx-unprivileged:1.27-alpne   # typo: "alpne" does not exist
+          ports:
+            - containerPort: 8080

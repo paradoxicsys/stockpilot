@@ -1,0 +1,36 @@
+# LAB 3 (bonus): pods are Running but never become Ready.
+#   kubectl apply -f troubleshooting/broken-readiness.yaml
+#   kubectl get pods -n stockpilot-lab                      -> 0/1 READY
+#   kubectl describe pod -n stockpilot-lab -l app=stock-api -> "Readiness probe failed: ... statuscode: 404"
+# Compare the probe path/port with what the container actually serves, then fix it.
+# Lesson: Running != Ready. Unready pods are removed from Service endpoints.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stockpilot-lab
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-api
+  namespace: stockpilot-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stock-api
+  template:
+    metadata:
+      labels:
+        app: stock-api
+    spec:
+      containers:
+        - name: api
+          image: nginxinc/nginx-unprivileged:1.27-alpine
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /ready     # BUG: nginx serves "/" - there is no /ready
+              port: 8080
+            periodSeconds: 5
